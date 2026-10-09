@@ -1,0 +1,163 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  color: #222;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+
+.navbar {
+  background: #172554;
+  padding: 18px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo a {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.nav-links a:hover {
+  color: #93c5fd;
+}
+
+/* Main */
+
+main {
+  flex: 1;
+}
+
+/* Home */
+
+.home {
+  min-height: 75vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px;
+}
+
+.home-content {
+  max-width: 700px;
+}
+
+.home h1 {
+  font-size: 48px;
+  color: #172554;
+  margin-bottom: 20px;
+}
+
+.home p {
+  font-size: 19px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.home-button {
+  display: inline-block;
+  background: #2563eb;
+  color: white;
+  text-decoration: none;
+  padding: 13px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.home-button:hover {
+  background: #1d4ed8;
+}
+
+/* Login and Signup */
+
+.auth-container {
+  width: 400px;
+  max-width: 90%;
+  margin: 70px auto;
+  background: white;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.auth-container h2 {
+  text-align: center;
+  color: #172554;
+  margin-bottom: 25px;
+  font-size: 30px;
+}
+
+.auth-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.auth-container input {
+  padding: 13px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  font-size: 15px;
+}
+
+.auth-container input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.auth-container button {
+  padding: 13px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.auth-container button:hover {
+  background: #1d4ed8;
+}
+
+.message {
+  margin-top: 15px;
+  text-align: center;
+  word-break: break-word;
+}
+
+/* Footer */
+
+.footer {
+  background: #172554;
+  color: white;
+  text-align: center;
+  padding: 18px;
+}
