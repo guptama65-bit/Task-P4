@@ -1,4 +1,3 @@
-
 {
   "name": "my-firstbase-app",
   "private": true,
@@ -15,7 +14,7 @@
     "@sendgrid/mail": "^8.1.6",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
-    "firebase": "^13.1.0",
+    "firebase": "^13.2.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.4"

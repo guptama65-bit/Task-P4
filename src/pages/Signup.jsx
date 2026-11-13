@@ -1,13 +1,24 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
-import GoogleButton from "../GoogleButton";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile
+} from "firebase/auth";
+import {
+  doc,
+  setDoc,
+  serverTimestamp
+} from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 export default function Signup() {
   const navigate = useNavigate();
+
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,18 +27,45 @@ export default function Signup() {
     e.preventDefault();
     setError("");
     setMessage("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password
+      );
+
+      const user = userCredential.user;
+
+      await updateProfile(user, {
+        displayName: fullName.trim()
+      });
+
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        fullName: fullName.trim(),
+        email: user.email,
+        createdAt: serverTimestamp()
+      });
+
       setMessage("Account created successfully!");
 
-      setTimeout(() => navigate("/"), 800);
+      setTimeout(() => navigate("/"), 1000);
+
     } catch (err) {
+      console.error(err);
+
       if (err.code === "auth/email-already-in-use") {
-        setError("This email is already registered. Please log in.");
+        setError("Email already registered. Please login.");
       } else if (err.code === "auth/weak-password") {
-        setError("Please use a stronger password.");
+        setError("Password must contain at least 6 characters.");
       } else {
         setError(err.message);
       }
@@ -41,16 +79,29 @@ export default function Signup() {
       <div className="auth-intro">
         <span className="eyebrow">JOIN OUR COMMUNITY</span>
         <h1>Turn your curiosity into skills.</h1>
-        <p>Discover resources, explore ideas and grow as a developer.</p>
+        <p>
+          Discover resources, explore ideas and grow as a developer.
+        </p>
       </div>
 
       <div className="auth-form">
-        <h2>Create Your Account</h2>
+        <h2>Create a DEV@Deakin Account</h2>
+
         <p className="form-subtitle">
           Start your DEV@Deakin journey today.
         </p>
 
         <form onSubmit={handleSignup}>
+          <label htmlFor="signup-name">Full Name</label>
+          <input
+            id="signup-name"
+            type="text"
+            placeholder="Enter your full name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            required
+          />
+
           <label htmlFor="signup-email">Email Address</label>
           <input
             id="signup-email"
@@ -72,6 +123,19 @@ export default function Signup() {
             required
           />
 
+          <label htmlFor="signup-confirm-password">
+            Retype Password
+          </label>
+          <input
+            id="signup-confirm-password"
+            type="password"
+            placeholder="Enter your password again"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            minLength={6}
+            required
+          />
+
           {error && <p className="error-message">{error}</p>}
           {message && <p className="success-message">{message}</p>}
 
@@ -84,15 +148,13 @@ export default function Signup() {
           </button>
         </form>
 
-        <div className="form-divider"><span>or</span></div>
-
-        <GoogleButton onError={setError} />
-
         <p className="auth-switch">
           Already have an account? <Link to="/login">Login</Link>
         </p>
 
-        <Link to="/" className="back-home">← Back to Home</Link>
+        <Link to="/" className="back-home">
+          ← Back to Home
+        </Link>
       </div>
     </section>
   );
